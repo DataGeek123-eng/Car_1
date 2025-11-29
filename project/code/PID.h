@@ -40,6 +40,8 @@ typedef struct {
 		
 ///useless		
 extern float pid_motor_out[4];
+extern float pid_speed_error1[4];
+extern float pid_speed_error2[4];
 extern float P_yaw;
 extern float I_yaw;
 extern float D_yaw;

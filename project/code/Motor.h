@@ -52,6 +52,7 @@ void motorinit_pwm_init(void);
 void motorset_speed(uint8 ch, int32 speed);
 void motion_analyse(float Vx, float Vy, float Vz);
 void Encoder_get(void);//获得编码器值
+
 void Encoder_init(void);
 void Encoder_clear(void);//编码器标志位清除
 void Turn_analyse(float Vx, float Vy, float Vz);//麦轮差速转向速度解析

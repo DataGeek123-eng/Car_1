@@ -53,26 +53,50 @@ int main(void)
     ips200_set_color(RGB565_WHITE, RGB565_BLACK);
     ips200_init(IPS200_TYPE);
     interrupt_global_enable(0); 
-		motorset_speed(1,1000);
-		motorset_speed(2,1000);
-		motorset_speed(3,1000);
-		motorset_speed(4,1000);
-		system_delay_ms(500);  
+    motorset_speed(1,1000);
+    motorset_speed(2,1000);
+    motorset_speed(3,1000);
+    motorset_speed(4,1000);
+    system_delay_ms(500);  
 
     motorinit_pwm_init();
     Encoder_init();
     pit_ms_init(PIT_CH0, 10);   
     interrupt_set_priority(PIT_IRQn, 0);  
+    motor_target_speed[0] = 1000;
+    motor_target_speed[1] = 1000;
+    motor_target_speed[2] = 1000;
+    motor_target_speed[3] = 1000;
     // 此处编写用户代码 例如外设初始化代码等
     while(1)
     {
-		
-        ips200_show_int(0, 0,  (int)encoder_distant[0], 4);
-        ips200_show_int(0, 16, (int)encoder_distant[1], 4);
-        ips200_show_int(0, 32, (int)encoder_distant[2], 4);
-        ips200_show_int(0, 48, (int)encoder_distant[3], 4);
-
+        // 显示实际速度
+        ips200_show_string(0, 0, "Encoder:");
+        ips200_show_int(0, 16*1, (int)encoder[0], 4);
+        ips200_show_int(0, 16*2, (int)encoder[1], 4);
+        ips200_show_int(0, 16*3, (int)encoder[2], 4);
+        ips200_show_int(0, 16*4, (int)encoder[3], 4);
         
+        // 显示目标速度
+        ips200_show_string(16*6, 0, "Target:");
+        ips200_show_int(16*6, 16*1, (int)motor_target_speed[0], 4);
+        ips200_show_int(16*6, 16*2, (int)motor_target_speed[1], 4);
+        ips200_show_int(16*6, 16*3, (int)motor_target_speed[2], 4);
+        ips200_show_int(16*6, 16*4, (int)motor_target_speed[3], 4);
+        
+        // 显示PID输出速度
+        ips200_show_string(16*12, 0, "Output:");
+        ips200_show_int(16*12, 16*1, (int)pid_motor_out[0], 4);
+        ips200_show_int(16*12, 16*2, (int)pid_motor_out[1], 4);
+        ips200_show_int(16*12, 16*3, (int)pid_motor_out[2], 4);
+        ips200_show_int(16*12, 16*4, (int)pid_motor_out[3], 4);
+        
+        // 显示误差
+        ips200_show_string(16*18, 0, "Error:");
+        ips200_show_int(16*18, 16*1, (int)pid_speed_error1[0], 4);
+        ips200_show_int(16*18, 16*2, (int)pid_speed_error1[1], 4);
+        ips200_show_int(16*18, 16*3, (int)pid_speed_error1[2], 4);
+        ips200_show_int(16*18, 16*4, (int)pid_speed_error1[3], 4);
     }
 }
 
