@@ -1,7 +1,7 @@
 #include "motor.h"
 
 float motor_target_speed[4];
-float encoder[4],encoder_distant[4];
+float encoder[4],encoder_distant[4]={0};
 
 float X_Encode, Y_Encode, X_Encode_last, Y_Encode_last,Y_Encode_last_handle,Y_distance, X_distance,Y_distance_handle; //四个轮子平均位移 ,x,y轴编码积分器累积值 ,x，y轴距离
 
@@ -36,13 +36,13 @@ void motorset_speed(uint8 ch, int32 speed)
     {
         if (speed >= 0)
         {
-            pwm_set_duty(MOTOR1_A, 1);
+            pwm_set_duty(MOTOR1_A, 10000);
             pwm_set_duty(MOTOR1_B, (uint32)speed);
         }
         else
         {
             pwm_set_duty(MOTOR1_A, 0);
-            pwm_set_duty(MOTOR1_B, (uint32)speed);
+            pwm_set_duty(MOTOR1_B, (uint32)-speed);
         }
     }
     break;
@@ -50,13 +50,13 @@ void motorset_speed(uint8 ch, int32 speed)
     {
         if (speed >= 0)
         {
-            pwm_set_duty(MOTOR2_A,1);
+            pwm_set_duty(MOTOR2_A,10000);
             pwm_set_duty(MOTOR2_B, (uint32)speed);
         }
         else
         {
-            pwm_set_duty(MOTOR2_A, 1);
-            pwm_set_duty(MOTOR2_B, (uint32)speed);
+            pwm_set_duty(MOTOR2_A, 0);
+            pwm_set_duty(MOTOR2_B, (uint32)-speed);
         }
     }
     break;
@@ -64,13 +64,13 @@ void motorset_speed(uint8 ch, int32 speed)
     {
         if (speed >= 0)
         {
-            pwm_set_duty(MOTOR3_A, 1);
+            pwm_set_duty(MOTOR3_A, 0);
             pwm_set_duty(MOTOR3_B, (uint32)speed);
         }
         else
         {
-            pwm_set_duty(MOTOR3_A, 0);
-            pwm_set_duty(MOTOR3_B, (uint32)speed);
+            pwm_set_duty(MOTOR3_A, 10000);
+            pwm_set_duty(MOTOR3_B, (uint32)-speed);
         }
     }
     break;
@@ -78,13 +78,13 @@ void motorset_speed(uint8 ch, int32 speed)
     {
         if (speed >= 0)
         {
-            pwm_set_duty(MOTOR4_A, 1);
+            pwm_set_duty(MOTOR4_A, 10000);
             pwm_set_duty(MOTOR4_B, (uint32)speed);
         }
         else
         {
             pwm_set_duty(MOTOR4_A, 0);
-            pwm_set_duty(MOTOR4_B, (uint32)speed);
+            pwm_set_duty(MOTOR4_B, (uint32)-speed);
         }
     }
     break;
@@ -124,6 +124,11 @@ void Encoder_get(void)
 	// encoder[1] = RecurrenceFilter(-encoder_get_count(ENCODER_2),EncoderData1);
 	// encoder[2] = RecurrenceFilter(-encoder_get_count(ENCODER_3),EncoderData2);
 	// encoder[3] = RecurrenceFilter(encoder_get_count(ENCODER_4),EncoderData3);
+	 encoder[0] = -encoder_get_count(ENCODER_1);
+	 encoder[1] = encoder_get_count(ENCODER_2);
+	 encoder[2] = -encoder_get_count(ENCODER_3);
+	 encoder[3] = encoder_get_count(ENCODER_4);
+
 
 }
 

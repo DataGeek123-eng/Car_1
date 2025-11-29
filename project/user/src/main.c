@@ -50,21 +50,26 @@ int main(void)
     motorinit_pwm_init();
     Encoder_init();
     system_delay_ms(300);     
-    pit_ms_init(PIT_CH0, 10);                                                  // 初始化 PIT_CH0 为周期中断 1000ms 周期
+    pit_ms_init(PIT_CH0, 40);                                                  // 初始化 PIT_CH0 为周期中断 1000ms 周期
     interrupt_set_priority(PIT_IRQn, 0);  
 
     system_delay_ms(300);           //等待主板其他外设上电完成
     ips200_set_dir(IPS200_PORTAIT);
     ips200_set_font(IPS200_8X16_FONT);
-    ips200_set_color(RGB565_RED, RGB565_BLACK);
+    ips200_set_color(RGB565_WHITE, RGB565_BLACK);
     ips200_init(IPS200_TYPE);
     interrupt_global_enable(0); 
+	motorset_speed(1,1000);
+	motorset_speed(2,1000);
+	motorset_speed(3,1000);
+	motorset_speed(4,1000);
 	
+        
     // 此处编写用户代码 例如外设初始化代码等
     while(1)
     {
 		
-        ips200_show_int(0, 0, encoder_distant[0], 4);
+        ips200_show_int(0, 0,  encoder_distant[0], 4);
         ips200_show_int(0, 16, encoder_distant[1], 4);
         ips200_show_int(0, 32, encoder_distant[2], 4);
         ips200_show_int(0, 48, encoder_distant[3], 4);
