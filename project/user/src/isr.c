@@ -51,6 +51,7 @@ void PIT_IRQHandler(void)
     if(pit_flag_get(PIT_CH0))
     {
         count++;
+        key_scanner();
         if(count>= 4) // 40ms ����һ�μ���
         {
             count = 0;

@@ -42,22 +42,20 @@
 // 本例程是开源库移植用空工程
 #define IPS200_TYPE     (IPS200_TYPE_SPI)  
 uint32 speeed;
+key_state_enum key_state[4];
 int main(void)
 {
     
     clock_init(SYSTEM_CLOCK_600M);  // 不可删除
-    debug_init();                   // 调试端口初始化                                                   // 初始化 PIT_CH0 为周期中断 1000ms 周期
+    debug_init();                   // 调试端口初始化 
+    key_init(10);                                                  // 初始化 PIT_CH0 为周期中断 1000ms 周期
     vofa_init();
     ips200_set_dir(IPS200_PORTAIT);
     ips200_set_font(IPS200_8X16_FONT);
     ips200_set_color(RGB565_WHITE, RGB565_BLACK);
     ips200_init(IPS200_TYPE);
     interrupt_global_enable(0); 
-//    motorset_speed(1,1000);
-//    motorset_speed(2,1000);
-//    motorset_speed(3,1000);
-//    motorset_speed(4,1000);
-    system_delay_ms(500);  
+    system_delay_ms(2000);  
 
     motorinit_pwm_init();
     Encoder_init();
@@ -71,7 +69,7 @@ int main(void)
     // 此处编写用户代码 例如外设初始化代码等
     while(1)
     {
-			
+        pid_key();
 		speeed=vofa_Rx();
         if(speeed!=-1)
         {
@@ -80,11 +78,10 @@ int main(void)
             motor_target_speed[2] = speeed;
             motor_target_speed[3] = speeed;
         }
-			
-//        wireless_TX_data[0] = encoder[0];
-//        wireless_TX_data[1] = motor_target_speed[0];
-//        wireless_TX_data[2] = pid_motor_out[0];
-//        vofa_tx();
+       wireless_TX_data[0] = encoder[0];
+       wireless_TX_data[1] = motor_target_speed[0];
+       wireless_TX_data[2] = pid_motor_out[0];
+       vofa_tx();
         // 显示实际速度
         ips200_show_string(0, 0, "Actual:");
         ips200_show_int(0, 16*1, (int)encoder[0], 6);
@@ -112,9 +109,58 @@ int main(void)
         ips200_show_int(16*9, 16*8, (int)pid_speed_error1[1], 6);
         ips200_show_int(16*9, 16*9, (int)pid_speed_error1[2], 6);
         ips200_show_int(16*9, 16*10, (int)pid_speed_error1[3], 6);
+        // 显示PID参数
+        ips200_show_string(0, 16*12, "PID:");
+        ips200_show_float(0, 16*13, base_pid.kp, 2, 4);
+        ips200_show_float(0, 16*14, base_pid.ki, 2, 4);
+        ips200_show_float(0, 16*15, base_pid.kd, 2, 4);
     }
 
 
+}
 
+// 定义PID调节按键
+void pid_key(void)
+{
+    key_state[0] = key_get_state(KEY_1);
 
+    if (key_state[0] == KEY_SHORT_PRESS)	
+    {
+        base_pid.kp += 0.1
+    }
+    else if (key_state[0] == KEY_LONG_PRESS)	
+    {
+        base_pid.kp -= 1;
+    }
+
+    key_state[1] = key_get_state(KEY_2);
+
+    if (key_state[1] == KEY_SHORT_PRESS)	
+    {
+        base_pid.kp += 0.1
+    }
+    else if (key_state[1] == KEY_LONG_PRESS)	
+    {
+        base_pid.kp -= 1;
+    }
+    
+    key_state[2] = key_get_state(KEY_3);
+    if (key_state[2] == KEY_SHORT_PRESS)	
+    {
+        base_pid.ki += 0.1
+    }
+    else if (key_state[2] == KEY_LONG_PRESS)	
+    {
+        base_pid.ki -= 1;
+    }
+    
+    key_state[3] = key_get_state(KEY_4);
+    if (key_state[3] == KEY_SHORT_PRESS)	
+    {
+        base_pid.kd += 0.1
+    }
+    else if (key_state[3] == KEY_LONG_PRESS)	
+    {
+        base_pid.kd -= 1;
+    }
 }

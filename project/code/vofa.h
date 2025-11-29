@@ -9,6 +9,4 @@ void vofa_init(void);
 void vofa_tx(void);
 uint32 vofa_Rx(void);
 
-
-
 #endif
