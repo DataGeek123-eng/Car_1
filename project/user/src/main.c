@@ -41,7 +41,7 @@
 
 // 本例程是开源库移植用空工程
 #define IPS200_TYPE     (IPS200_TYPE_SPI)  
-
+uint32 speeed;
 int main(void)
 {
     
@@ -67,15 +67,24 @@ int main(void)
     motor_target_speed[1] = 1000;
     motor_target_speed[2] = 1000;
     motor_target_speed[3] = 1000;
-    wireless_TX_data[0] = 1.0f;
-    wireless_TX_data[1] = 2.3f;
-    wireless_TX_data[2] = 4.0f;
-    wireless_TX_data[3] = 5.0f;
+
     // 此处编写用户代码 例如外设初始化代码等
     while(1)
     {
-
-        vofa_tx();
+			
+		speeed=vofa_Rx();
+        if(speeed!=-1)
+        {
+            motor_target_speed[0] = speeed;
+            motor_target_speed[1] = speeed;
+            motor_target_speed[2] = speeed;
+            motor_target_speed[3] = speeed;
+        }
+			
+//        wireless_TX_data[0] = encoder[0];
+//        wireless_TX_data[1] = motor_target_speed[0];
+//        wireless_TX_data[2] = pid_motor_out[0];
+//        vofa_tx();
         // 显示实际速度
         ips200_show_string(0, 0, "Actual:");
         ips200_show_int(0, 16*1, (int)encoder[0], 6);
