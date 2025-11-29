@@ -2,6 +2,8 @@
 ".\objects\isr.o"
 ".\objects\main.o"
 ".\objects\motor.o"
+".\objects\pid.o"
+".\objects\function.o"
 ".\objects\zf_common_clock.o"
 ".\objects\zf_common_debug.o"
 ".\objects\zf_common_fifo.o"

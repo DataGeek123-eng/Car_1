@@ -1,4 +1,4 @@
-./objects/pid.o: code\Pid.c \
+./objects/pid.o: ..\code\PID.c ..\code\PID.h \
   ..\..\libraries\zf_common\zf_common_headfile.h \
   C:\Keil_v5\ARM\ARMCLANG\Bin\..\include\stdio.h \
   C:\Keil_v5\ARM\ARMCLANG\Bin\..\include\stdint.h \
@@ -106,4 +106,4 @@
   ..\..\libraries\components\sdmmc\common\fsl_sdmmc_spec.h \
   ..\..\libraries\components\sdmmc\sdmmc_config.h \
   ..\..\libraries\sdk\board\clock_config.h ..\code\Motor.h \
-  code\Encoder.h code\Pid.h
+  code\Encoder.h ..\code\function.h

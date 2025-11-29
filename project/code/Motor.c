@@ -1,7 +1,7 @@
 #include "motor.h"
 
 float motor_target_speed[4];
-float encoder[4],encoder_distant[4]={0};
+float encoder[4]={0},encoder_distant[4]={0};
 
 float X_Encode, Y_Encode, X_Encode_last, Y_Encode_last,Y_Encode_last_handle,Y_distance, X_distance,Y_distance_handle; //四个轮子平均位移 ,x,y轴编码积分器累积值 ,x，y轴距离
 

@@ -47,11 +47,18 @@ void CSI_IRQHandler(void)
 
 void PIT_IRQHandler(void)
 {
+    static uint8 count = 0;
     if(pit_flag_get(PIT_CH0))
     {
-        Encoder_get();
-        Encoder_clear();
-        Encode_distance();
+        count++;
+        if(count>= 4) // 40ms 调用一次计算
+        {
+            count = 0;
+            Encoder_get();
+            Encoder_clear();
+            Encode_distance();
+            pid_motor();
+        }
         pit_flag_clear(PIT_CH0);
     }
     
