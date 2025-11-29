@@ -419,26 +419,6 @@
               <FileType>5</FileType>
               <FilePath>..\code\Motor.h</FilePath>
             </File>
-            <File>
-              <FileName>Pid.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>.\code\Pid.c</FilePath>
-            </File>
-            <File>
-              <FileName>Pid.h</FileName>
-              <FileType>5</FileType>
-              <FilePath>.\code\Pid.h</FilePath>
-            </File>
-            <File>
-              <FileName>Encoder.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>.\code\Encoder.c</FilePath>
-            </File>
-            <File>
-              <FileName>Encoder.h</FileName>
-              <FileType>5</FileType>
-              <FilePath>.\code\Encoder.h</FilePath>
-            </File>
           </Files>
         </Group>
         <Group>

@@ -1,127 +1,158 @@
-#include "zf_common_headfile.h"
-#include "math.h"
+#include "motor.h"
 
-float  Speed_Target[4]={0};
+float motor_target_speed[4];
+float encoder[4],encoder_distant[4];
 
-void Motor_Init()
+float X_Encode, Y_Encode, X_Encode_last, Y_Encode_last,Y_Encode_last_handle,Y_distance, X_distance,Y_distance_handle; //四个轮子平均位移 ,x,y轴编码积分器累积值 ,x，y轴距离
+
+float KX = 4.0f, KY = 4.093333f;
+
+void motorinit_pwm_init(void)
 {
-	pwm_channel_enum channel_list[CHANNEL_NUMBER] = {PWM_CH1_A, PWM_CH1_B, PWM_CH2_A, PWM_CH2_B,
-		
-	                                                 PWM_CH3_A, PWM_CH3_B, PWM_CH4_A, PWM_CH4_B};
-	
-	//默认PWM_DUTY_MAX=10000，可在zf_driver_pwm_h中更改
-	pwm_init(PWM_CH1_A, 17000, 0);                                                // 初始化 PWM 通道 频率 17KHz 初始占空比 0%
-    pwm_init(PWM_CH1_B, 17000, 0);                                                // 初始化 PWM 通道 频率 17KHz 初始占空比 0%
-    pwm_init(PWM_CH2_A, 17000, 0);                                                // 初始化 PWM 通道 频率 17KHz 初始占空比 0%
-    pwm_init(PWM_CH2_B, 17000, 0);                                                // 初始化 PWM 通道 频率 17KHz 初始占空比 0%
-    pwm_init(PWM_CH3_A, 17000, 0); 
-    pwm_init(PWM_CH3_B, 17000, 0); 
-    pwm_init(PWM_CH4_A, 17000, 0); 
-    pwm_init(PWM_CH4_B, 17000, 0); 
-}	
+    //最大占空比值PWM_DUTY_MAX 可以在fsl_pwm.h文件中修改 默认为50000
+    //对于一个PWM模块 包含的所有通道只能输出频率一样 占空比不一样的 PWM RT1021只有两个PWM模块 每个模块有8个通道
+    pwm_init(MOTOR1_A, 17000, 0);
+    pwm_init(MOTOR1_B, 17000, 0);
+    pwm_init(MOTOR2_A, 17000, 0);
+    pwm_init(MOTOR2_B, 17000, 0);
+    pwm_init(MOTOR3_A, 17000, 0);
+    pwm_init(MOTOR3_B, 17000, 0);
+    pwm_init(MOTOR4_A, 17000, 0);
+    pwm_init(MOTOR4_B, 17000, 0);
+}
 
-
-//任意方向运动
-void Motor_TargetSpeed(uint16_t Angle,int16_t Speed,int16_t Wv)//Wv正为顺时针，负为逆时针
+//-------------------------------------------------------------------------------------------------------------------
+//  @brief      控制电机PWM通道赋值
+//  @param      ch         选择电机通道（0,1,2,3）
+//  @param      speed      对应电机的速度
+//-------------------------------------------------------------------------------------------------------------------
+void motorset_speed(uint8 ch, int32 speed)
 {
-	
-	
-	
-	Speed_Target[0]=(sin(Angle)*Speed+cos(Angle)*Speed+Wv);
-	Speed_Target[1]=(sin(Angle)*Speed-cos(Angle)*Speed-Wv);
-	Speed_Target[2]=(sin(Angle)*Speed+cos(Angle)*Speed-Wv);
-	Speed_Target[3]=(sin(Angle)*Speed-cos(Angle)*Speed+Wv);
-	
-	scale_limit(Speed_Target);//比例限幅
+//    speed = target_limit_int(speed, -3000, 3000);
+
+    switch (ch)
+    {
+    case 1:
+    {
+        if (speed >= 0)
+        {
+            pwm_set_duty(MOTOR1_A, 1);
+            pwm_set_duty(MOTOR1_B, (uint32)speed);
+        }
+        else
+        {
+            pwm_set_duty(MOTOR1_A, 0);
+            pwm_set_duty(MOTOR1_B, (uint32)speed);
+        }
+    }
+    break;
+    case 2:
+    {
+        if (speed >= 0)
+        {
+            pwm_set_duty(MOTOR2_A,1);
+            pwm_set_duty(MOTOR2_B, (uint32)speed);
+        }
+        else
+        {
+            pwm_set_duty(MOTOR2_A, 1);
+            pwm_set_duty(MOTOR2_B, (uint32)speed);
+        }
+    }
+    break;
+    case 3:
+    {
+        if (speed >= 0)
+        {
+            pwm_set_duty(MOTOR3_A, 1);
+            pwm_set_duty(MOTOR3_B, (uint32)speed);
+        }
+        else
+        {
+            pwm_set_duty(MOTOR3_A, 0);
+            pwm_set_duty(MOTOR3_B, (uint32)speed);
+        }
+    }
+    break;
+    case 4:
+    {
+        if (speed >= 0)
+        {
+            pwm_set_duty(MOTOR4_A, 1);
+            pwm_set_duty(MOTOR4_B, (uint32)speed);
+        }
+        else
+        {
+            pwm_set_duty(MOTOR4_A, 0);
+            pwm_set_duty(MOTOR4_B, (uint32)speed);
+        }
+    }
+    break;
+    }
+
 }
 
 
-void Motor_Mode(Motor_mode M)
+void motion_analyse(float Vx, float Vy, float Vz)//麦轮速度解析
 {
-	switch (M)
-	{
-		case(Front):
-		    Motor_TargetSpeed(90,1000,0);
-			break;
-		
-		case(Back):
-			Motor_TargetSpeed(270,1000,0);
-			break;
-		
-		case(Left):
-		    Motor_TargetSpeed(0,1000,0);
-			break;
-		
-		case(Right):
-		    Motor_TargetSpeed(180,1000,0);
-			break;
-		
-		case(Turn_left):
-		    Motor_TargetSpeed(0,0,1000);
-			break;
-		
-		case(Turn_right):
-		    Motor_TargetSpeed(0,0,-1000);
-			break;
-		
-		default:
-		
-			break;
-		
-	}
-		
+    motor_target_speed[0] = (Vy - Vx +Vz);
+    motor_target_speed[1] = (Vy + Vx -Vz);
+    motor_target_speed[2] = (Vy - Vx -Vz);
+    motor_target_speed[3] = (Vy + Vx +Vz);
 }
 
-void Motor_pwm()
+void Turn_analyse(float Vx, float Vy, float Vz)//麦轮差速转向速度解析
 {
-	if(pid_motor_out[0]>0)
-	{
-		pwm_set_duty(PWM_CH1_A,pid_motor_out[0]);
-		pwm_set_duty(PWM_CH1_B,0);
-	}
-	else
-	{
-		pwm_set_duty(PWM_CH1_A,-pid_motor_out[0]);
-		pwm_set_duty(PWM_CH1_B,PWM_DUTY_MAX);
-	}
-	
-	if(pid_motor_out[1]>0)
-	{
-		pwm_set_duty(PWM_CH2_A,pid_motor_out[1]);
-		pwm_set_duty(PWM_CH2_B,0);
-	}
-	else
-	{
-		pwm_set_duty(PWM_CH2_A,-pid_motor_out[1]);
-		pwm_set_duty(PWM_CH2_B,PWM_DUTY_MAX);
-	}
-	
-	if(pid_motor_out[2]>0)
-	{
-		pwm_set_duty(PWM_CH3_A,pid_motor_out[2]);
-		pwm_set_duty(PWM_CH3_B,0);
-	}
-	else
-	{
-		pwm_set_duty(PWM_CH3_A,-pid_motor_out[2]);
-		pwm_set_duty(PWM_CH3_B,PWM_DUTY_MAX);
-	}
-	
-	if(pid_motor_out[3]>0)
-	{
-		pwm_set_duty(PWM_CH4_A,pid_motor_out[3]);
-		pwm_set_duty(PWM_CH4_B,0);
-	}
-	else
-	{
-		pwm_set_duty(PWM_CH4_A,-pid_motor_out[3]);
-		pwm_set_duty(PWM_CH4_B,PWM_DUTY_MAX);
-	}
-	
-	
+    motor_target_speed[0] = (Vy -Vx +1*Vz);
+    motor_target_speed[1] = (Vy +Vx -1*Vz);
+    motor_target_speed[2] = (Vy - Vx - 1.4*Vz);
+    motor_target_speed[3] = (Vy + Vx + 1.4*Vz);
 }
 
 
+void Encoder_init(void)
+{
+    encoder_dir_init(ENCODER_1, ENCODER_1_LSB, ENCODER_1_DIR); // 初始化编码器模块与引脚 方向编码器模式
+    encoder_dir_init(ENCODER_2, ENCODER_2_LSB, ENCODER_2_DIR); // 初始化编码器模块与引脚 方向编码器模式
+    encoder_dir_init(ENCODER_3, ENCODER_3_LSB, ENCODER_3_DIR); // 初始化编码器模块与引脚 方向编码器模式
+    encoder_dir_init(ENCODER_4, ENCODER_4_LSB, ENCODER_4_DIR);
+}
+
+void Encoder_get(void)
+{
+	// encoder[0] = RecurrenceFilter(encoder_get_count(ENCODER_1),EncoderData0);//递推得到每个编码器的值
+	// encoder[1] = RecurrenceFilter(-encoder_get_count(ENCODER_2),EncoderData1);
+	// encoder[2] = RecurrenceFilter(-encoder_get_count(ENCODER_3),EncoderData2);
+	// encoder[3] = RecurrenceFilter(encoder_get_count(ENCODER_4),EncoderData3);
+
+}
 
 
+void Encoder_clear(void)
+{
+    encoder_clear_count(ENCODER_1);
+    encoder_clear_count(ENCODER_2);   
+    encoder_clear_count(ENCODER_3); 
+	encoder_clear_count(ENCODER_4);  
+}
 
+uint8 Encode_distance(void)
+{
+//     Y_Encode = (encoder[0] + encoder[1] + encoder[2] + encoder[3]) / 4.0f;//求合速度
+//     X_Encode = (encoder[1] + encoder[3] -	 encoder[2] - encoder[0]) / 4.0f;
+ 
+//     X_distance = X_distance + KX * ((X_Encode + X_Encode_last) * dtt / 2.0f);//权值求平均KX就是一个常数
+//     Y_distance = Y_distance + KY * ((Y_Encode + Y_Encode_last) * dtt / 2.0f);
+//     Y_distance_handle= Y_distance_handle + KY * ((Y_Encode + Y_Encode_last) * dtt / 2.0f);
+//     X_Encode_last = X_Encode;
+//     Y_Encode_last = Y_Encode;
+// 	  Y_Encode_last_handle=Y_Encode;
+//    return 1;
+
+    encoder_distant[0] += encoder[0];    
+    encoder_distant[1] += encoder[1];    
+    encoder_distant[2] += encoder[2];    
+    encoder_distant[3] += encoder[3];    
+    return 1;
+
+}

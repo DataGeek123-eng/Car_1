@@ -40,48 +40,35 @@
 // 第二步 project->clean  等待下方进度条走完
 
 // 本例程是开源库移植用空工程
-
-Motor_mode MODE=Front;
+#define IPS200_TYPE     (IPS200_TYPE_SPI)  
 
 int main(void)
 {
+    
     clock_init(SYSTEM_CLOCK_600M);  // 不可删除
     debug_init();                   // 调试端口初始化
-	system_delay_ms(300);           //等待主板其他外设上电完成
-    interrupt_global_enable(0);
+    motorinit_pwm_init();
+    Encoder_init();
+    system_delay_ms(300);     
+    pit_ms_init(PIT_CH0, 10);                                                  // 初始化 PIT_CH0 为周期中断 1000ms 周期
+    interrupt_set_priority(PIT_IRQn, 0);  
+
+    system_delay_ms(300);           //等待主板其他外设上电完成
+    ips200_set_dir(IPS200_PORTAIT);
+    ips200_set_font(IPS200_8X16_FONT);
+    ips200_set_color(RGB565_RED, RGB565_BLACK);
+    ips200_init(IPS200_TYPE);
+    interrupt_global_enable(0); 
 	
-    // 此处编写用户代码 例如外设初始化代码等
-    Motor_Init();
-	Encoder_Init();
-	
-	
-	Motor_Mode(MODE);
-//	pwm_set_duty(PWM_CH2_A,1000);
-//		pwm_set_duty(PWM_CH2_B,0);
     // 此处编写用户代码 例如外设初始化代码等
     while(1)
     {
 		
-		system_delay_ms(500);
-		printf("%f.\r\n",pid_motor_out[1]);
-//        // 此处编写需要循环执行的代码
-//        
-//        encoder_data[0] = encoder_get_count(ENCODER_DIR_1);// 获取编码器计数
-//    encoder_clear_count(ENCODER_DIR_1);// 清空编码器计数                          
-//     
-//	encoder_data[1] = encoder_get_count(ENCODER_DIR_2);// 获取编码器计数
-//    encoder_clear_count(ENCODER_DIR_2);// 清空编码器计数
-//	
-//	encoder_data[2] = encoder_get_count(ENCODER_DIR_3);// 获取编码器计数
-//    encoder_clear_count(ENCODER_DIR_3);// 清空编码器计数
-//	
-//	encoder_data[3] = encoder_get_count(ENCODER_DIR_4);// 获取编码器计数
-//    encoder_clear_count(ENCODER_DIR_4);// 清空编码器计数
-//	
-//	pid_motor();
-//	Motor_pwm();
-//        // 此处编写需要循环执行的代码
-//		system_delay_ms(50);
+        ips200_show_int(0, 0, encoder_distant[0], 4);
+        ips200_show_int(0, 16, encoder_distant[1], 4);
+        ips200_show_int(0, 32, encoder_distant[2], 4);
+        ips200_show_int(0, 48, encoder_distant[3], 4);
+        
     }
 }
 
