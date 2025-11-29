@@ -34,7 +34,7 @@
 ********************************************************************************************************************/
 
 #include "zf_common_headfile.h"
-
+void pid_key(void);
 // 打开新的工程或者工程移动了位置务必执行以下操作
 // 第一步 关闭上面所有打开的文件
 // 第二步 project->clean  等待下方进度条走完
@@ -61,10 +61,10 @@ int main(void)
     Encoder_init();
     pit_ms_init(PIT_CH0, 10);   
     interrupt_set_priority(PIT_IRQn, 0);  
-    motor_target_speed[0] = 1000;
-    motor_target_speed[1] = 1000;
-    motor_target_speed[2] = 1000;
-    motor_target_speed[3] = 1000;
+    motor_target_speed[0] = 500;
+    motor_target_speed[1] = 500;
+    motor_target_speed[2] = 500;
+    motor_target_speed[3] = 500;
 
     // 此处编写用户代码 例如外设初始化代码等
     while(1)
@@ -126,41 +126,41 @@ void pid_key(void)
 
     if (key_state[0] == KEY_SHORT_PRESS)	
     {
-        base_pid.kp += 0.1
+        base_pid.kp += 0.1;
     }
     else if (key_state[0] == KEY_LONG_PRESS)	
     {
-        base_pid.kp -= 1;
+        base_pid.kp += 0.1;
     }
 
     key_state[1] = key_get_state(KEY_2);
 
     if (key_state[1] == KEY_SHORT_PRESS)	
     {
-        base_pid.kp += 0.1
+        base_pid.kp -= 0.1;
     }
     else if (key_state[1] == KEY_LONG_PRESS)	
     {
-        base_pid.kp -= 1;
+        base_pid.kp -= 0.1;
     }
     
     key_state[2] = key_get_state(KEY_3);
     if (key_state[2] == KEY_SHORT_PRESS)	
     {
-        base_pid.ki += 0.1
+        base_pid.ki += 0.1;
     }
     else if (key_state[2] == KEY_LONG_PRESS)	
     {
-        base_pid.ki -= 1;
+        base_pid.ki += 1;
     }
     
     key_state[3] = key_get_state(KEY_4);
     if (key_state[3] == KEY_SHORT_PRESS)	
     {
-        base_pid.kd += 0.1
+        base_pid.ki -= 0.1;
     }
     else if (key_state[3] == KEY_LONG_PRESS)	
     {
-        base_pid.kd -= 1;
+        base_pid.ki -= 1;
     }
 }

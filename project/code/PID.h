@@ -8,6 +8,7 @@ typedef struct {
     float i_max; //integrator_max
     float p_max; //integrator_max
     float d_max; //integrator_max
+	float out_max; //integrator_max
 
     float low_pass;
 
@@ -21,7 +22,7 @@ typedef struct {
     float pre_pre_error;
 } pid_param_t;
 
-#define PID_CREATE(_kp, _ki, _kd, _low_pass, max_p, max_i, max_d) \
+#define PID_CREATE(_kp, _ki, _kd, _low_pass, max_p, max_i, max_d, max_out) \
     {                                    \
         .kp = _kp,                       \
         .ki = _ki,                       \
@@ -33,6 +34,7 @@ typedef struct {
         .p_max = max_p,                  \
         .i_max = max_i,                  \
         .d_max = max_d,                  \
+		.out_max = max_out,                  \
     }
 ///////////////////以上不太好懂，chat_gpt一下	
 
