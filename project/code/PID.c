@@ -1,6 +1,6 @@
 #include "PID.h"
 
-pid_param_t base_pid=PID_CREATE(512,13,0,0,0,0,0);//在pid.h里结构体在这调用
+pid_param_t base_pid=PID_CREATE(0.7,0.25,0,0,0,0,0);//在pid.h里结构体在这调用
 
 
 float pid_motor_out[4] = {0, 0, 0, 0};//pid传出
@@ -37,8 +37,8 @@ void pid_motor(void)
         pid_speed_error2[j] = pid_speed_error1[j];
     }
     
-	motorset_speed(0, target_limit_float(pid_motor_out[0],-4000,4000));
-	motorset_speed(1, target_limit_float(pid_motor_out[1],-4000,4000));
-	motorset_speed(2, target_limit_float(pid_motor_out[2],-4000,4000));
-	motorset_speed(3, target_limit_float(pid_motor_out[3],-4000,4000));
+	motorset_speed(1, target_limit_float(pid_motor_out[0],-2000,2000));
+//	motorset_speed(2, target_limit_float(pid_motor_out[1],-2000,2000));
+//	motorset_speed(3, target_limit_float(pid_motor_out[2],-2000,2000));
+//	motorset_speed(4, target_limit_float(pid_motor_out[3],-2000,2000));
 } 
