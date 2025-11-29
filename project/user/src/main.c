@@ -47,7 +47,7 @@ int main(void)
     
     clock_init(SYSTEM_CLOCK_600M);  // 不可删除
     debug_init();                   // 调试端口初始化                                                   // 初始化 PIT_CH0 为周期中断 1000ms 周期
-
+    vofa_init();
     ips200_set_dir(IPS200_PORTAIT);
     ips200_set_font(IPS200_8X16_FONT);
     ips200_set_color(RGB565_WHITE, RGB565_BLACK);
@@ -67,11 +67,17 @@ int main(void)
     motor_target_speed[1] = 1000;
     motor_target_speed[2] = 1000;
     motor_target_speed[3] = 1000;
+    wireless_TX_data[0] = 1.0f;
+    wireless_TX_data[1] = 2.3f;
+    wireless_TX_data[2] = 4.0f;
+    wireless_TX_data[3] = 5.0f;
     // 此处编写用户代码 例如外设初始化代码等
     while(1)
     {
+
+        vofa_tx();
         // 显示实际速度
-        ips200_show_string(0, 0, "Encoder:");
+        ips200_show_string(0, 0, "Actual:");
         ips200_show_int(0, 16*1, (int)encoder[0], 6);
         ips200_show_int(0, 16*2, (int)encoder[1], 6);
         ips200_show_int(0, 16*3, (int)encoder[2], 6);
