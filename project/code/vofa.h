@@ -7,6 +7,6 @@
 extern float wireless_TX_data[COUNT_TX];//蓝牙串口发送数据数组COUNT_TX在vofa.h
 void vofa_init(void);
 void vofa_tx(void);
-uint32 vofa_Rx(void);
+int32 vofa_Rx(void);
 
 #endif

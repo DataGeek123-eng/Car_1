@@ -1,7 +1,7 @@
 #include "PID.h"
 
 //pid_param_t base_pid=PID_CREATE(1.5,0.6,0.5,0,0,0,0,2000);//在pid.h里结构体在这调用
-pid_param_t base_pid=PID_CREATE(1.5,0.6,0.5,0,0,0,0,2000);//在pid.h里结构体在这调用
+pid_param_t base_pid=PID_CREATE(10,0.3,0,0,0,0,0,2000);//在pid.h里结构体在这调用
 
 
 float pid_motor_out[4] = {0, 0, 0, 0};//pid传出
@@ -22,6 +22,7 @@ void pid_motor(void)
     {    
         pid_speed_error1[j] = motor_target_speed[j] - encoder[j];
         // 计算比例项
+		if(pid_speed_error1[j]>0.5)
         p_term = base_pid.kp * pid_speed_error1[j];
         
         // 计算积分项

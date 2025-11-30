@@ -41,27 +41,28 @@ void pid_key(void);
 
 // 本例程是开源库移植用空工程
 #define IPS200_TYPE     (IPS200_TYPE_SPI)  
-uint32 speeed;
+int32 speeed=0;
 key_state_enum key_state[4];
 int main(void)
 {
     
     clock_init(SYSTEM_CLOCK_600M);  // 不可删除
     debug_init();                   // 调试端口初始化 
-    key_init(10);                                                  // 初始化 PIT_CH0 为周期中断 1000ms 周期
-    vofa_init();
+	system_delay_ms(2000); 
+    key_init(10);                                                  
+    vofa_init();  
     ips200_set_dir(IPS200_PORTAIT);
     ips200_set_font(IPS200_8X16_FONT);
     ips200_set_color(RGB565_WHITE, RGB565_BLACK);
     ips200_init(IPS200_TYPE);
     interrupt_global_enable(0); 
-    system_delay_ms(2000);  
-
+     
     motorinit_pwm_init();
     Encoder_init();
-    pit_ms_init(PIT_CH0, 10);   
-    interrupt_set_priority(PIT_IRQn, 0);  
-    motor_target_speed[0] = 500;
+    pit_ms_init(PIT_CH0, 1);   // 初始化 PIT_CH0 为周期中断 10ms 周期
+    interrupt_set_priority(PIT_IRQn, 0);
+	
+    motor_target_speed[0] = 1024*5/100;
     motor_target_speed[1] = 500;
     motor_target_speed[2] = 500;
     motor_target_speed[3] = 500;
@@ -71,17 +72,19 @@ int main(void)
     {
         pid_key();
 		speeed=vofa_Rx();
-        if(speeed!=-1)
+        if(speeed!=100000)
         {
             motor_target_speed[0] = speeed;
             motor_target_speed[1] = speeed;
             motor_target_speed[2] = speeed;
             motor_target_speed[3] = speeed;
         }
+		
        wireless_TX_data[0] = encoder[0];
        wireless_TX_data[1] = motor_target_speed[0];
        wireless_TX_data[2] = pid_motor_out[0];
        vofa_tx();
+		
         // 显示实际速度
         ips200_show_string(0, 0, "Actual:");
         ips200_show_int(0, 16*1, (int)encoder[0], 6);

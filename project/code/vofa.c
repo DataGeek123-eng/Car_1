@@ -16,7 +16,7 @@ void vofa_tx(void)
     wireless_uart_send_buffer(tail, 4);
 }
 
-uint32 vofa_Rx(void)
+int32 vofa_Rx(void)
 {
     data_len = wireless_uart_read_buffer(data_buffer, 32);   
     if (data_len != 0)
@@ -35,5 +35,5 @@ uint32 vofa_Rx(void)
         return int_value;   
 
     }
-    return -1;
+    return 100000;
 }

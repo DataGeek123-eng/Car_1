@@ -785,6 +785,11 @@
               <FilePath>..\..\libraries\zf_device\zf_device_camera.h</FilePath>
             </File>
             <File>
+              <FileName>zf_device_imu660ra.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\libraries\zf_device\zf_device_imu660ra.c</FilePath>
+            </File>
+            <File>
               <FileName>zf_device_icm20602.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\..\libraries\zf_device\zf_device_icm20602.c</FilePath>
@@ -803,11 +808,6 @@
               <FileName>zf_device_imu963ra.h</FileName>
               <FileType>5</FileType>
               <FilePath>..\..\libraries\zf_device\zf_device_imu963ra.h</FilePath>
-            </File>
-            <File>
-              <FileName>zf_device_imu660ra.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\libraries\zf_device\zf_device_imu660ra.c</FilePath>
             </File>
             <File>
               <FileName>zf_device_imu660ra.h</FileName>
