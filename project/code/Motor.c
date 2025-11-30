@@ -120,14 +120,14 @@ void Encoder_init(void)
 
 void Encoder_get(void)
 {
-	// encoder[0] = RecurrenceFilter(encoder_get_count(ENCODER_1),EncoderData0);//递推得到每个编码器的值
-	// encoder[1] = RecurrenceFilter(-encoder_get_count(ENCODER_2),EncoderData1);
-	// encoder[2] = RecurrenceFilter(-encoder_get_count(ENCODER_3),EncoderData2);
-	// encoder[3] = RecurrenceFilter(encoder_get_count(ENCODER_4),EncoderData3);
-	 encoder[0] = -encoder_get_count(ENCODER_1);
-	 encoder[1] = encoder_get_count(ENCODER_2);
-	 encoder[2] = -encoder_get_count(ENCODER_3);
-	 encoder[3] = encoder_get_count(ENCODER_4);
+	encoder[0] = RecurrenceFilter(-encoder_get_count(ENCODER_1),EncoderData0);//递推得到每个编码器的值
+	encoder[1] = RecurrenceFilter(encoder_get_count(ENCODER_2),EncoderData1);
+	encoder[2] = RecurrenceFilter(-encoder_get_count(ENCODER_3),EncoderData2);
+	encoder[3] = RecurrenceFilter(encoder_get_count(ENCODER_4),EncoderData3);
+	//  encoder[0] = -encoder_get_count(ENCODER_1);
+	//  encoder[1] = encoder_get_count(ENCODER_2);
+	//  encoder[2] = -encoder_get_count(ENCODER_3);
+	//  encoder[3] = encoder_get_count(ENCODER_4);
 
 
 }
@@ -143,16 +143,16 @@ void Encoder_clear(void)
 
 uint8 Encode_distance(void)
 {
-//     Y_Encode = (encoder[0] + encoder[1] + encoder[2] + encoder[3]) / 4.0f;//求合速度
-//     X_Encode = (encoder[1] + encoder[3] -	 encoder[2] - encoder[0]) / 4.0f;
+    // Y_Encode = (encoder[0] + encoder[1] + encoder[2] + encoder[3]) / 4.0f;//求合速度
+    // X_Encode = (encoder[1] + encoder[3] -	 encoder[2] - encoder[0]) / 4.0f;
  
-//     X_distance = X_distance + KX * ((X_Encode + X_Encode_last) * dtt / 2.0f);//权值求平均KX就是一个常数
-//     Y_distance = Y_distance + KY * ((Y_Encode + Y_Encode_last) * dtt / 2.0f);
-//     Y_distance_handle= Y_distance_handle + KY * ((Y_Encode + Y_Encode_last) * dtt / 2.0f);
-//     X_Encode_last = X_Encode;
-//     Y_Encode_last = Y_Encode;
-// 	  Y_Encode_last_handle=Y_Encode;
-//    return 1;
+    // X_distance = X_distance + KX * ((X_Encode + X_Encode_last) * dtt / 2.0f);//权值求平均KX就是一个常数
+    // Y_distance = Y_distance + KY * ((Y_Encode + Y_Encode_last) * dtt / 2.0f);
+    // Y_distance_handle= Y_distance_handle + KY * ((Y_Encode + Y_Encode_last) * dtt / 2.0f);
+    // X_Encode_last = X_Encode;
+    // Y_Encode_last = Y_Encode;
+	// Y_Encode_last_handle=Y_Encode;
+   return 1;
 
     encoder_distant[0] += encoder[0];    
     encoder_distant[1] += encoder[1];    

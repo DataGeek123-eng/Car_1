@@ -47,14 +47,19 @@ void CSI_IRQHandler(void)
 
 void PIT_IRQHandler(void)
 {
-    static uint8 count = 0;
+    static uint8 count1,count2 = 0;
     if(pit_flag_get(PIT_CH0))
     {
-        count++;
-        key_scanner();
-        if(count>= 4) // 40ms ����һ�μ���
+        count1++,count2++;
+        if (count1>= 10)
         {
-            count = 0;
+            count1 = 0;
+            key_scanner();
+        }   
+        
+        if(count2>= 40) // 40ms 
+        {
+            count2 = 0;
             Encoder_get();
             Encoder_clear();
             Encode_distance();

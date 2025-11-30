@@ -59,19 +59,21 @@ int main(void)
      
     motorinit_pwm_init();
     Encoder_init();
-    pit_ms_init(PIT_CH0, 1);   // 初始化 PIT_CH0 为周期中断 10ms 周期
+    pit_ms_init(PIT_CH0, 1);   // 初始化 PIT_CH0 为周期中断 1ms 周期
     interrupt_set_priority(PIT_IRQn, 0);
 	
-    motor_target_speed[0] = 1024*5/100;
+    motor_target_speed[0] = 0;
     motor_target_speed[1] = 500;
     motor_target_speed[2] = 500;
     motor_target_speed[3] = 500;
+		
+//		motorset_speed(1, 2000);
 
     // 此处编写用户代码 例如外设初始化代码等
     while(1)
     {
         pid_key();
-		speeed=vofa_Rx();
+		    speeed=vofa_Rx();
         if(speeed!=100000)
         {
             motor_target_speed[0] = speeed;
@@ -129,41 +131,41 @@ void pid_key(void)
 
     if (key_state[0] == KEY_SHORT_PRESS)	
     {
-        base_pid.kp += 0.1;
+        base_pid.kd += 0.1;
     }
     else if (key_state[0] == KEY_LONG_PRESS)	
     {
-        base_pid.kp += 0.1;
+        base_pid.kd += 0.1;
     }
 
     key_state[1] = key_get_state(KEY_2);
 
     if (key_state[1] == KEY_SHORT_PRESS)	
     {
-        base_pid.kp -= 0.1;
+        base_pid.kd -= 0.1;
     }
     else if (key_state[1] == KEY_LONG_PRESS)	
     {
-        base_pid.kp -= 0.1;
+        base_pid.kd -= 0.1;
     }
     
     key_state[2] = key_get_state(KEY_3);
     if (key_state[2] == KEY_SHORT_PRESS)	
     {
-        base_pid.ki += 0.1;
+        base_pid.ki += 0.01;
     }
     else if (key_state[2] == KEY_LONG_PRESS)	
     {
-        base_pid.ki += 1;
+        base_pid.ki += 0.01;
     }
     
     key_state[3] = key_get_state(KEY_4);
     if (key_state[3] == KEY_SHORT_PRESS)	
     {
-        base_pid.ki -= 0.1;
+        base_pid.ki -= 0.01;
     }
     else if (key_state[3] == KEY_LONG_PRESS)	
     {
-        base_pid.ki -= 1;
+        base_pid.ki -= 0.01;
     }
 }
