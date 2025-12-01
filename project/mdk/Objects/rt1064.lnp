@@ -5,6 +5,8 @@
 ".\objects\pid.o"
 ".\objects\function.o"
 ".\objects\vofa.o"
+".\objects\menu.o"
+".\objects\menuflash.o"
 ".\objects\zf_common_clock.o"
 ".\objects\zf_common_debug.o"
 ".\objects\zf_common_fifo.o"

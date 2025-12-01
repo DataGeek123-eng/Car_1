@@ -1,4 +1,4 @@
-./objects/isr.o: ..\user\src\isr.c \
+./objects/menu.o: ..\code\menu.c \
   ..\..\libraries\zf_common\zf_common_headfile.h \
   C:\Keil_v5\ARM\ARMCLANG\Bin\..\include\stdio.h \
   C:\Keil_v5\ARM\ARMCLANG\Bin\..\include\stdint.h \
@@ -107,4 +107,4 @@
   ..\..\libraries\components\sdmmc\sdmmc_config.h \
   ..\..\libraries\sdk\board\clock_config.h ..\code\Motor.h \
   code\Encoder.h ..\code\function.h ..\code\PID.h ..\code\vofa.h \
-  ..\code\menu.h ..\code\menuflash.h ..\user\inc\isr.h
+  ..\code\menu.h ..\code\menuflash.h

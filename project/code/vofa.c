@@ -10,8 +10,12 @@ void vofa_init(void)
    wireless_uart_init();
 }
 
-void vofa_tx(void)
+void vofa_tx(uint8 motor)
 {
+    wireless_TX_data[0] = motor_pid[motor].Actual;
+    wireless_TX_data[1] = motor_pid[motor].Target;
+    wireless_TX_data[2] = motor_pid[motor].Out;
+    wireless_TX_data[3] = motor_pid[motor].Error1;
     wireless_uart_send_buffer((uint8 *)wireless_TX_data, 4*4); // Ò»¸ö¸¡µã
     wireless_uart_send_buffer(tail, 4);
 }

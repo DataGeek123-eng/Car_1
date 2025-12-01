@@ -129,6 +129,8 @@
 #include "function.h"
 #include "PID.h"
 #include "vofa.h"
+#include "menu.h"
+#include "menuflash.h"
 //===================================================用户自定义文件===================================================
 
 #endif

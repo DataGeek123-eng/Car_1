@@ -3,6 +3,8 @@
         "zf_common_headfile.h": "c",
         "motor.h": "c",
         "zf_device_wireless_uart.h": "c",
-        "pid.h": "c"
+        "pid.h": "c",
+        "bit": "c",
+        "limits": "c"
     }
 }

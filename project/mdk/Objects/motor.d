@@ -106,4 +106,5 @@
   ..\..\libraries\components\sdmmc\common\fsl_sdmmc_spec.h \
   ..\..\libraries\components\sdmmc\sdmmc_config.h \
   ..\..\libraries\sdk\board\clock_config.h code\Encoder.h \
-  ..\code\function.h ..\code\PID.h ..\code\vofa.h
+  ..\code\function.h ..\code\PID.h ..\code\vofa.h ..\code\menu.h \
+  ..\code\menuflash.h
