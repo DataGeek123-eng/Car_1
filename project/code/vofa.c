@@ -12,11 +12,39 @@ void vofa_init(void)
 
 void vofa_tx(uint8 motor)
 {
-    wireless_TX_data[0] = motor_pid[motor].Actual;
-    wireless_TX_data[1] = motor_pid[motor].Target;
-    wireless_TX_data[2] = motor_pid[motor].Out;
-    wireless_TX_data[3] = motor_pid[motor].Error1;
-    wireless_uart_send_buffer((uint8 *)wireless_TX_data, 4*4); // 一个浮点
+
+    if(motor==5)
+    {
+        wireless_TX_data[0] = motor_pid[0].Actual;
+        wireless_TX_data[1] = motor_pid[0].Target;
+        wireless_TX_data[2] = motor_pid[0].Out;
+        wireless_TX_data[3] = motor_pid[0].Error1;
+
+        wireless_TX_data[4] = motor_pid[1].Actual;
+        wireless_TX_data[5] = motor_pid[1].Target;
+        wireless_TX_data[6] = motor_pid[1].Out;
+        wireless_TX_data[7] = motor_pid[1].Error1;
+        
+        wireless_TX_data[8] = motor_pid[2].Actual;
+        wireless_TX_data[9] = motor_pid[2].Target;
+        wireless_TX_data[10] = motor_pid[2].Out;
+        wireless_TX_data[11] = motor_pid[2].Error1;
+
+        wireless_TX_data[12] = motor_pid[3].Actual;
+        wireless_TX_data[13] = motor_pid[3].Target;
+        wireless_TX_data[14] = motor_pid[3].Out;
+        wireless_TX_data[15] = motor_pid[3].Error1;
+
+        wireless_uart_send_buffer((uint8 *)wireless_TX_data, 16*4); 
+    }
+    else
+    {
+        wireless_TX_data[0] = motor_pid[motor].Actual;
+        wireless_TX_data[1] = motor_pid[motor].Target;
+        wireless_TX_data[2] = motor_pid[motor].Out;
+        wireless_TX_data[3] = motor_pid[motor].Error1;
+        wireless_uart_send_buffer((uint8 *)wireless_TX_data, 4*4); // 一个浮点
+    }
     wireless_uart_send_buffer(tail, 4);
 }
 

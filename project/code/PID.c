@@ -1,37 +1,38 @@
 #include "PID.h"
 
+
 PID_t motor_pid[4] = {
     {
         .Target = 0,
         .Kp = 0.8,
         .Ki = 0.32,
         .Kd = 0.3,
-        .OutMax = 4500,
-        .max_output_i = 4500 * 0.6,
+        .OutMax = OUT_Max,
+        .max_output_i = OUT_Max * ratio_i,
     },
     {
         .Target = 0,
-        .Kp = 0.0,
-        .Ki = 0.00,
-        .Kd = 0.0,
-        .OutMax = 100,
-        .max_output_i = 100 * 0.6,
+        .Kp = 0.8,
+        .Ki = 0.32,
+        .Kd = 0.3,
+        .OutMax = OUT_Max,
+        .max_output_i = OUT_Max * ratio_i,
     },
     {
         .Target = 0,
-        .Kp = 0.0,
-        .Ki = 0.00,
-        .Kd = 0.0,
-        .OutMax = 100,
-        .max_output_i = 100 * 0.6,
+        .Kp = 1.6,
+        .Ki = 0.41,
+        .Kd = 0.3,
+        .OutMax = OUT_Max,
+        .max_output_i = OUT_Max * ratio_i,
     },
     {
         .Target = 0,
-        .Kp = 0.0,
-        .Ki = 0.00,
-        .Kd = 0.0,
-        .OutMax = 100,
-        .max_output_i = 100 * 0.6,
+        .Kp = 0.8,
+        .Ki = 0.32,
+        .Kd = 0.3,
+        .OutMax = OUT_Max,
+        .max_output_i = OUT_Max * ratio_i,
     }
 };
 

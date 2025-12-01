@@ -95,10 +95,10 @@ void motorset_speed(uint8 ch, int32 speed)
 
 void motion_analyse(float Vx, float Vy, float Vz)//麦轮速度解析
 {
-    motor_target_speed[0] = (Vy - Vx +Vz);
-    motor_target_speed[1] = (Vy + Vx -Vz);
-    motor_target_speed[2] = (Vy - Vx -Vz);
-    motor_target_speed[3] = (Vy + Vx +Vz);
+    motor_pid[0].Target = (Vy - Vx +Vz);
+    motor_pid[1].Target = (Vy + Vx -Vz);
+    motor_pid[2].Target = (Vy - Vx -Vz);
+    motor_pid[3].Target = (Vy + Vx +Vz);
 }
 
 void Turn_analyse(float Vx, float Vy, float Vz)//麦轮差速转向速度解析

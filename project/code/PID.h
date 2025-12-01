@@ -4,6 +4,10 @@
 
 // max_output_i！=0时，积分项输出限幅
 
+#define OUT_Max   4500
+#define ratio_i   0.6
+
+
 typedef struct {
 	float Target;
 	float Actual;

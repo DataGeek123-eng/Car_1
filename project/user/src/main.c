@@ -60,11 +60,10 @@ int main(void)
     pit_ms_init(PIT_CH0, 1);   // 初始化 PIT_CH0 为周期中断 1ms 周期
     interrupt_set_priority(PIT_IRQn, 0);
 	pit_ms_init(PIT_CH1, 1);  
-
     // 此处编写用户代码 例如外设初始化代码等
     while(1)
     {
-        pid_key(0);
+        Speed_key(2);
 		speeed=vofa_Rx();
         if(speeed!=100000)
         {
@@ -73,7 +72,11 @@ int main(void)
             motor_pid[2].Target = speeed;
             motor_pid[3].Target = speeed;
         }
-       vofa_tx(0);
+
+		
+			vofa_tx(5);
+		
+       
        menu_show();
     }
 
